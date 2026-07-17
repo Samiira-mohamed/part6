@@ -10,6 +10,7 @@ vi.mock('./services/anecdotes', () => ({
   }
 }))
 
+import anecdoteService from './services/anecdotes'
 import useAnecdoteStore, { useAnecdotes, useAnecdoteActions } from './store'
 
 beforeEach(() => {
@@ -31,6 +32,21 @@ describe('useAnecdoteActions', () => {
 
     const { result: anecdotesResult } = renderHook(() => useAnecdotes())
     expect(anecdotesResult.current).toEqual(mockAnecdotes)
+  })
+
+  it('vote increases the votes of an anecdote', async () => {
+    const anecdote = { id: 1, content: 'Test', votes: 0 }
+    useAnecdoteStore.setState({ anecdotes: [anecdote] })
+    anecdoteService.update.mockResolvedValue({ ...anecdote, votes: 1 })
+
+    const { result } = renderHook(() => useAnecdoteActions())
+
+    await act(async () => {
+      await result.current.vote(1)
+    })
+
+    const { result: anecdotesResult } = renderHook(() => useAnecdotes())
+    expect(anecdotesResult.current[0].votes).toBe(1)
   })
 })
 
