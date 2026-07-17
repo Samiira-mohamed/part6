@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getAnecdotes, createAnecdote } from './requests'
+import { getAnecdotes, createAnecdote, updateAnecdote } from './requests'
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -18,11 +18,26 @@ const App = () => {
     }
   })
 
+  const voteAnecdoteMutation = useMutation({
+    mutationFn: updateAnecdote,
+    onSuccess: (updatedAnecdote) => {
+      const anecdotes = queryClient.getQueryData(['anecdotes'])
+      queryClient.setQueryData(
+        ['anecdotes'],
+        anecdotes.map(a => a.id === updatedAnecdote.id ? updatedAnecdote : a)
+      )
+    }
+  })
+
   const addAnecdote = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.reset()
     newAnecdoteMutation.mutate({ content, votes: 0 })
+  }
+
+  const handleVote = (anecdote) => {
+    voteAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
   }
 
   if (result.isPending) {
@@ -47,7 +62,10 @@ const App = () => {
       {anecdotes.map(anecdote => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
-          <div>has {anecdote.votes} votes</div>
+          <div>
+            has {anecdote.votes}
+            <button onClick={() => handleVote(anecdote)}>vote</button>
+          </div>
         </div>
       ))}
     </div>
