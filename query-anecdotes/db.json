@@ -39,6 +39,11 @@
       "content": "Hi",
       "votes": 0,
       "id": "i931vPmwb4Y"
+    },
+    {
+      "content": "hello",
+      "votes": 0,
+      "id": "WxfEux4G5Z8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
