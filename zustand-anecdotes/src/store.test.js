@@ -50,3 +50,26 @@ describe('useAnecdotes sorting', () => {
     expect(result.current[2].content).toBe('Low votes')
   })
 })
+
+describe('useAnecdotes filtering', () => {
+  const anecdotes = [
+    { id: 1, content: 'JavaScript is fun', votes: 0 },
+    { id: 2, content: 'Coding is hard', votes: 0 },
+  ]
+
+  beforeEach(() => {
+    useAnecdoteStore.setState({ anecdotes })
+  })
+
+  it('returns all anecdotes with no filter', () => {
+    const { result } = renderHook(() => useAnecdotes())
+    expect(result.current).toHaveLength(2)
+  })
+
+  it('filters anecdotes matching the filter text', () => {
+    useAnecdoteStore.setState({ anecdotes, filter: 'javascript' })
+    const { result } = renderHook(() => useAnecdotes())
+    expect(result.current).toHaveLength(1)
+    expect(result.current[0].content).toBe('JavaScript is fun')
+  })
+})
