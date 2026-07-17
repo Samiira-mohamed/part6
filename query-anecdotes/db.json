@@ -34,6 +34,11 @@
       "content": "Testing TanStack Query",
       "votes": 0,
       "id": "88rSL1OyJUs"
+    },
+    {
+      "content": "Hi",
+      "votes": 0,
+      "id": "i931vPmwb4Y"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
