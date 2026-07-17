@@ -33,3 +33,20 @@ describe('useAnecdoteActions', () => {
     expect(anecdotesResult.current).toEqual(mockAnecdotes)
   })
 })
+
+describe('useAnecdotes sorting', () => {
+  it('returns anecdotes sorted by votes in descending order', () => {
+    const anecdotes = [
+      { id: 1, content: 'Low votes', votes: 1 },
+      { id: 2, content: 'High votes', votes: 5 },
+      { id: 3, content: 'Medium votes', votes: 3 },
+    ]
+    useAnecdoteStore.setState({ anecdotes })
+
+    const { result } = renderHook(() => useAnecdotes())
+
+    expect(result.current[0].content).toBe('High votes')
+    expect(result.current[1].content).toBe('Medium votes')
+    expect(result.current[2].content).toBe('Low votes')
+  })
+})
