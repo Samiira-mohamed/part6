@@ -1,4 +1,5 @@
 import { useAnecdotes } from './hooks/useAnecdotes'
+import Notification from './components/Notification'
 
 const App = () => {
   const { anecdotes, isPending, isError, addAnecdote, vote } = useAnecdotes()
@@ -21,6 +22,8 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
+
+      <Notification />
 
       <form onSubmit={handleSubmit}>
         <input name="anecdote" />

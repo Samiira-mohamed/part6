@@ -1,8 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { getAnecdotes, createAnecdote, updateAnecdote } from '../requests'
+import NotificationContext from '../NotificationContext'
 
 export const useAnecdotes = () => {
   const queryClient = useQueryClient()
+  const { setNotification } = useContext(NotificationContext)
+
+  const notify = (message) => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
+  }
 
   const result = useQuery({
     queryKey: ['anecdotes'],
@@ -15,6 +25,7 @@ export const useAnecdotes = () => {
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+      notify(`you created '${newAnecdote.content}'`)
     }
   })
 
@@ -26,6 +37,7 @@ export const useAnecdotes = () => {
         ['anecdotes'],
         anecdotes.map(a => a.id === updatedAnecdote.id ? updatedAnecdote : a)
       )
+      notify(`you voted '${updatedAnecdote.content}'`)
     }
   })
 
