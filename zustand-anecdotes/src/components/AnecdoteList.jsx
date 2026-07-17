@@ -1,11 +1,14 @@
 import { useAnecdotes, useAnecdoteActions } from '../store'
+import { useNotificationActions } from '../notificationStore'
 
 const AnecdoteList = () => {
-  const anecdotes = useAnecdotes().toSorted((a, b) => b.votes - a.votes)
+  const anecdotes = useAnecdotes()
   const { vote } = useAnecdoteActions()
+  const { setNotification } = useNotificationActions()
 
-  const handleVote = (id) => {
-    vote(id)
+  const handleVote = (anecdote) => {
+    vote(anecdote.id)
+    setNotification(`you voted '${anecdote.content}'`)
   }
 
   return (
@@ -15,7 +18,7 @@ const AnecdoteList = () => {
           {anecdote.content}
           <br />
           has {anecdote.votes}
-          <button onClick={() => handleVote(anecdote.id)}>vote</button>
+          <button onClick={() => handleVote(anecdote)}>vote</button>
         </li>
       ))}
     </ul>
